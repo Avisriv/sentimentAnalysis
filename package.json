@@ -20,6 +20,7 @@
     "@angular/router": "^16.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
+    "xlsx": "^0.18.5",
     "zone.js": "~0.13.0"
   },
   "devDependencies": {
@@ -33,6 +34,9 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
+    "protractor": "~5.4.4",
+    "ts-node": "~7.0.0",
+    "tslint": "~5.15.0",
     "typescript": "~5.0.2"
   }
 }
