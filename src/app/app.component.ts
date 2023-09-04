@@ -22,45 +22,54 @@ export class AppComponent {
   /**
    * on file drop handler
    */
-  onFileDropped($event: any) {
-    this.prepareFilesList($event);
+  onFileDropped(evt: any) {
+    this.prepareFilesList(evt);
+
+        /* wire up file reader */
+        const target: DataTransfer = <DataTransfer>(evt);
+        if (target.files.length !== 1) throw new Error('Cannot use multiple files');
+        const reader: FileReader = new FileReader();
+        reader.onload = (e: any) => {
+          /* read workbook */
+          const bstr: string = e.target.result;
+          const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
+    
+          /* grab first sheet */
+          const wsname: string = wb.SheetNames[0];
+          const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+    
+          /* save data */
+          this.data = <AOA>(XLSX.utils.sheet_to_json(ws, { header: 1 }));
+          console.log(this.data);
+        };
+      //  reader.readAsBinaryString(target as File);
   }
 
   /**
    * handle file from browsing
    */
-  fileBrowseHandler(evt: any) {
-    this.prepareFilesList(evt.target.files);
-    /* wire up file reader */
-    const target: DataTransfer = <DataTransfer>(evt.target);
-    if (target.files.length !== 1) throw new Error('Cannot use multiple files');
-    const reader: FileReader = new FileReader();
-    reader.onload = (e: any) => {
-      /* read workbook */
-      const bstr: string = e.target.result;
-      const workbook: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
+  onFileChange(evt: any) {
+   // this.prepareFilesList(evt.target.files);
 
-      /* grab first sheet */
-      const wsname: string = workbook.SheetNames[0];
-      const ws: XLSX.WorkSheet = workbook.Sheets[wsname];
-
-       //   const workbook = XLSX.readFile(filePath);
-//    const sheetName = workbook.SheetNames[0];
-    const worksheet = workbook.Sheets[wsname];
-    this.data = XLSX.utils.sheet_to_json(worksheet);
-
-      /* save data */
-   //   this.data = <AOA>(XLSX.utils.sheet_to_json(ws, { header: 1 }));
-      console.log("data:",this.data);
-      this.data.map(res=>{
-        if(res[0] === "no"){
-          console.log(res[0]);
-        }else{
-          console.log(res[0]);
-        }
-      })
-    };
-    reader.readAsBinaryString(target.files[0]);
+        /* wire up file reader */
+        const target: DataTransfer = <DataTransfer>(evt.target);
+        console.log("length:"+target.files.length);
+        if (target.files.length !== 1) throw new Error('Cannot use multiple files');
+        const reader: FileReader = new FileReader();
+        reader.onload = (e: any) => {
+          /* read workbook */
+          const bstr: string = e.target.result;
+          const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
+    
+          /* grab first sheet */
+          const wsname: string = wb.SheetNames[0];
+          const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+    
+          /* save data */
+          this.data = XLSX.utils.sheet_to_json(ws);
+          console.log(this.data);
+        };
+        reader.readAsBinaryString(target.files[0]);
   }
 
   /**
@@ -130,7 +139,7 @@ export class AppComponent {
     this.inputFiles(this.data);
   }
 
-  inputFiles(filePath: AOA) {
+  inputFiles(filePath: any) {
     this.feedbackService.analyzeFeedback(filePath).subscribe(
       (outputFile) => {
         console.log(`Analysis completed. Results saved to ${outputFile}`);

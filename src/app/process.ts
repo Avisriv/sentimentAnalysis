@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import * as XLSX from 'xlsx'; // Import XLSX for Excel file handling
-import { HttpClient } from '@angular/common/http'; // Import HttpClient for making HTTP requests
+import * as XLSX from 'xlsx'; 
+import { HttpClient } from '@angular/common/http'; 
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -18,7 +18,7 @@ export class FeedbackAnalysisService {
     Accept: 'application/json',
   };
 
-  constructor(private http: HttpClient) {}
+  constructor(private httpClient: HttpClient) {}
 
   analyzeFeedback(jsonData: any): Observable<any> {
     // Load the Excel file
@@ -26,6 +26,8 @@ export class FeedbackAnalysisService {
 //    const sheetName = workbook.SheetNames[0];
 //    const worksheet = workbook.Sheets[sheetName];
   //  const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+  console.log("json:"+jsonData);
 
     const sentiments: string[] = [];
     const keyPhrases: string[] = [];
@@ -43,7 +45,7 @@ export class FeedbackAnalysisService {
       };
 
       // Analyze sentiment
-      this.http
+      this.httpClient
         .post<any>(
           this.textAnalyticsEndpoint + this.sentimentEndpoint,
           { documents: [document] },
@@ -54,7 +56,7 @@ export class FeedbackAnalysisService {
             console.log(`Sentiment response for document ${index}:`, response);
             const sentiment = this.getSentiment(response);
             console.log(`Sentiment for document ${index}:`, sentiment);
-            sentiments.push(sentiment);
+            sentiments[index] = sentiment;
           },
           (error) => {
             console.error(error);
@@ -63,7 +65,7 @@ export class FeedbackAnalysisService {
         );
 
       // Extract key phrases
-      this.http
+      this.httpClient
         .post<any>(
           this.textAnalyticsEndpoint + this.keyPhrasesEndpoint,
           { documents: [document] },
@@ -73,11 +75,11 @@ export class FeedbackAnalysisService {
           (response) => {
             console.log(`Key phrases response for document ${index}:`, response);
             const phrases = response.documents[0].keyPhrases;
-            keyPhrases.push(phrases.join(', '));
+            keyPhrases[index] = phrases.join(', ');
           },
           (error) => {
             console.error(error);
-            keyPhrases.push('error');
+            keyPhrases[index] = 'error';
           }
         );
     });
@@ -105,7 +107,7 @@ export class FeedbackAnalysisService {
 
         observer.next(outputFile); // Emit the file path when done
         observer.complete();
-      }, 500); // Adjust the timeout as needed
+      }, 2000); // Adjust the timeout as needed
     });
   }
 
