@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as XLSX from 'xlsx';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from './../environments/environment';
+
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +11,7 @@ export class FeedbackAnalysisService {
   private textAnalyticsEndpoint = 'https://translateflask.azurewebsites.net';
   private translationEndpoint = '/api/exodusTranslate';
   private keyPhrasesEndpoint = '/text/analytics/v3.0/keyPhrases';
-  private textAnalyticsKey = process.env.APIKEY; // Replace with your Azure Text Analytics key
+  private textAnalyticsKey = 'c23f4f17c4ae4e32b2cdafc296f431d1'; // Replace with your Azure Text Analytics key
 
   private headers = {
     'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ export class FeedbackAnalysisService {
           (response) => {
             console.log(`Translation response for document ${index}:`, response);
             const sentiment = response['translations']
-            console.log(`Translation for document ${index}:`, sentiment);
+            console.log(`Sentiment for document ${index}:`, sentiment);
             sentiments[index] = sentiment;
           },
           (error) => {
