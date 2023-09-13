@@ -10,7 +10,7 @@ export class FeedbackAnalysisService {
   private textAnalyticsEndpoint = 'https://exo-lang.cognitiveservices.azure.com';
   private sentimentEndpoint = '/text/analytics/v3.0/sentiment';
   private keyPhrasesEndpoint = '/text/analytics/v3.0/keyPhrases';
-  private textAnalyticsKey = 'c23f4f17c4ae4e32b2cdafc296f431d1'; // Replace with your Azure Text Analytics key
+  private textAnalyticsKey = ''; // Replace with your Azure Text Analytics key
 
   private headers = {
     'Content-Type': 'application/json',
@@ -107,7 +107,7 @@ export class FeedbackAnalysisService {
 
         observer.next(outputFile); // Emit the file path when done
         observer.complete();
-      }, 2000); // Adjust the timeout as needed
+      }, 4000); // Adjust the timeout as needed
     });
   }
 

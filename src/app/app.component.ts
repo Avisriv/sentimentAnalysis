@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from "@angular/core";
-import { FeedbackAnalysisService } from "./process";
+import { FeedbackAnalysisService } from "./translate";
 import * as XLSX from 'xlsx';
 
 type AOA = any[][];
