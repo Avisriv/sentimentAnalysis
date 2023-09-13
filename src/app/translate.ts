@@ -11,7 +11,7 @@ export class FeedbackAnalysisService {
   private textAnalyticsEndpoint = 'https://translateflask.azurewebsites.net';
   private translationEndpoint = '/api/exodusTranslate';
   private keyPhrasesEndpoint = '/text/analytics/v3.0/keyPhrases';
-  private textAnalyticsKey = 'c23f4f17c4ae4e32b2cdafc296f431d1'; // Replace with your Azure Text Analytics key
+  private textAnalyticsKey = ''; // Replace with your Azure Text Analytics key
 
   private headers = {
     'Content-Type': 'application/json',
